@@ -4,4 +4,5 @@
 Fake WeChat Picture Browser
 
 ## Gradle
+```
 compile 'ppp.tlg:freedrag:0.0.1'
