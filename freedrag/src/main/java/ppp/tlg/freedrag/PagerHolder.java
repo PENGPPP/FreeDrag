@@ -9,14 +9,14 @@ public abstract class PagerHolder<T> {
 
     View rootView;
 
-    abstract View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, int position);
+    public abstract View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, int position);
 
-    abstract void fillView(@NonNull T t);
+    public abstract void fillView(@NonNull T t);
 
     protected void userVisible(int position) {
     }
 
-    protected void userInvisible() {
+    protected void userInvisible(int position) {
     }
 
 }

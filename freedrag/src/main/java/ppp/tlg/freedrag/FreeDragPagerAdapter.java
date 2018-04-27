@@ -54,8 +54,8 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
     public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         PagerHolder holder = (PagerHolder) object;
         if (holder != primaryItemHolder) {
-            if (primaryItemHolder != null) {
-                primaryItemHolder.userInvisible();
+            if (primaryItemHolder != null && position > 0) {
+                primaryItemHolder.userInvisible(position - 1);
             }
 
             holder.userVisible(position);
@@ -73,7 +73,7 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
         return ((PagerHolder) object).rootView == view;
     }
 
-    abstract PagerHolder createHolder(int position, int type);
+    public abstract PagerHolder createHolder(int position, int type);
 
     protected int getHolderType(int position) {
         return NO_TYPE;
