@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SuperPagerAdapter extends PagerAdapter {
+public abstract class FreeDragPagerAdapter extends PagerAdapter {
 
     private List<View> viewPool = new ArrayList<>();
     private List<View> removeViewPool = new ArrayList<>();

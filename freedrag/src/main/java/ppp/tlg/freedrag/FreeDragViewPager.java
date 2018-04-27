@@ -9,15 +9,15 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-public class SuperViewPager extends ViewPager {
+public class FreeDragViewPager extends ViewPager {
 
-    private SuperPagerAdapter adapter;
+    private FreeDragPagerAdapter adapter;
 
-    public SuperViewPager(@NonNull Context context) {
+    public FreeDragViewPager(@NonNull Context context) {
         super(context);
     }
 
-    public SuperViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public FreeDragViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -27,8 +27,8 @@ public class SuperViewPager extends ViewPager {
         Log.i("SUPER_VIEW_PAGER", "GETITEM:" + getCurrentItem());
         Object ob = adapter.getCurrentRootView();
 
-        if (ob != null && ob instanceof TouchLayout) {
-            return ((TouchLayout) ob).touchFocusBackToParent() && super.onInterceptTouchEvent(ev);
+        if (ob != null && ob instanceof FreeDragLayout) {
+            return ((FreeDragLayout) ob).touchFocusBackToParent() && super.onInterceptTouchEvent(ev);
         } else {
             return super.onInterceptTouchEvent(ev);
         }
@@ -37,11 +37,11 @@ public class SuperViewPager extends ViewPager {
 
     @Override
     public void setAdapter(@Nullable PagerAdapter adapter) {
-        if (!(adapter instanceof SuperPagerAdapter)) {
-            throw new RuntimeException("this pager adapter must be " + SuperPagerAdapter.class.getName());
+        if (!(adapter instanceof FreeDragPagerAdapter)) {
+            throw new RuntimeException("this pager adapter must be " + FreeDragPagerAdapter.class.getName());
         }
 
-        this.adapter = (SuperPagerAdapter) adapter;
+        this.adapter = (FreeDragPagerAdapter) adapter;
         super.setAdapter(adapter);
     }
 }

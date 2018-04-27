@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-public class TouchLayout extends RelativeLayout {
+public class FreeDragLayout extends RelativeLayout {
 
     private GestureDetector gestureDetector;
     private ScaleGestureDetector scaleGestureDetector;
@@ -33,17 +33,17 @@ public class TouchLayout extends RelativeLayout {
 
     private boolean touchFocusBackToParentEnable = false;
 
-    public TouchLayout(@NonNull Context context) {
+    public FreeDragLayout(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public TouchLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public FreeDragLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public TouchLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public FreeDragLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
