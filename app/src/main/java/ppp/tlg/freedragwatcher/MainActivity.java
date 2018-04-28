@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void bindHolder(PagerHolder holder, int position) {
-
+            holder.fillView(position);
         }
 
         @Override
@@ -60,7 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void fillView(@NonNull Integer integer) {
-
+            rootView.findViewById(R.id.demo_image_view)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.i("DRAG_CLICK_TAG", "-----------:");
+                        }
+                    });
         }
 
         @Override

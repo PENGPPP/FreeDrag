@@ -44,7 +44,7 @@ publish {
     userOrg = 'thelastgamertom'
     groupId = 'ppp.tlg'
     artifactId = 'freedrag'
-    publishVersion = '0.0.10'
+    publishVersion = '0.0.11'
     desc = 'Fake WeChat Picture Browser'
     website = 'https://github.com/PENGPPP/FreeDrag.git'
 }

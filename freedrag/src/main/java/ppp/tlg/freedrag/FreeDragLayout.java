@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -55,6 +56,12 @@ public class FreeDragLayout extends RelativeLayout {
     private void init() {
 
         gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return getChild().performClick();
+            }
+
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 
@@ -175,6 +182,11 @@ public class FreeDragLayout extends RelativeLayout {
         return true;
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return true;
+    }
+
     private void checkStatus() {
         startMoveFlag = false;
 
@@ -201,7 +213,9 @@ public class FreeDragLayout extends RelativeLayout {
                 .setDuration(ANIMATION_DURATION)
                 .start();
 
-        ValueAnimator va = ValueAnimator.ofInt(lastBgAlpha, 255);
+        int startAlpha = lastBgAlpha;
+        lastBgAlpha = 255;
+        ValueAnimator va = ValueAnimator.ofInt(startAlpha, 255);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -346,7 +360,8 @@ public class FreeDragLayout extends RelativeLayout {
         child.setScaleX(1f);
         child.setScaleY(1f);
 
-        getBackground().setAlpha(255);
+        lastBgAlpha = 255;
+        getBackground().setAlpha(lastBgAlpha);
 
         ViewCompat.postInvalidateOnAnimation(this);
     }
