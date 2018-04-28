@@ -2,6 +2,7 @@ package ppp.tlg.freedrag;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
 
     private List<View> viewPool = new ArrayList<>();
     private List<View> removeViewPool = new ArrayList<>();
+    private List<PagerHolder> holderPool = new ArrayList<>();
     private PagerHolder primaryItemHolder;
 
     private static final int NO_TYPE = -1;
@@ -20,8 +22,12 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        log("instantiateItem");
+
         PagerHolder holder = createHolder(position, getHolderType(position));
-        View view = holder.onCreateView(LayoutInflater.from(container.getContext()), container, position);
+        holder.position = position;
+        holderPool.add(holder);
+        View view = holder.onCreateView(LayoutInflater.from(container.getContext()), container);
         holder.rootView = view;
         viewPool.add(view);
         bindHolder(holder, position);
@@ -30,16 +36,25 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        removeViewPool.add(((PagerHolder) object).rootView);
+
+        log("destroyItem");
+
+        PagerHolder holder = ((PagerHolder) object);
+        holderPool.remove(holder);
+        holder.onDestroyView();
+        removeViewPool.add(holder.rootView);
     }
 
 
     @Override
     public void startUpdate(@NonNull ViewGroup container) {
+        log("startUpdate");
     }
 
     @Override
     public void finishUpdate(@NonNull ViewGroup container) {
+        log("finishUpdate");
+
         for (View view : viewPool) {
             container.addView(view);
         }
@@ -53,13 +68,15 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        log("setPrimaryItem");
+
         PagerHolder holder = (PagerHolder) object;
         if (holder != primaryItemHolder) {
             if (primaryItemHolder != null && position > 0) {
-                primaryItemHolder.userInvisible(position - 1);
+                primaryItemHolder.userInvisible();
             }
 
-            holder.userVisible(position);
+            holder.userVisible();
             primaryItemHolder = holder;
         }
     }
@@ -68,6 +85,9 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
         return primaryItemHolder.rootView;
     }
 
+    private void log(String log) {
+        Log.i("FREE_DRAG_ADAPTER", log);
+    }
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
@@ -76,10 +96,20 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
 
     public abstract PagerHolder createHolder(int position, int type);
 
+    public void update(PagerHolder holder, int position) {
+    }
+
     public abstract void bindHolder(PagerHolder holder, int position);
 
     protected int getHolderType(int position) {
         return NO_TYPE;
     }
 
+    public void notifyDataSetChanged(int position) {
+        for (PagerHolder holder : holderPool) {
+            if (holder.position == position) {
+                update(holder, position);
+            }
+        }
+    }
 }

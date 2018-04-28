@@ -1,5 +1,6 @@
 package ppp.tlg.freedragwatcher;
 
+import android.database.DataSetObserver;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,8 +20,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final DemoPagerAdapter adapter = new DemoPagerAdapter();
+
         FreeDragViewPager viewPager = findViewById(R.id.dragViewPager);
         viewPager.setAdapter(new DemoPagerAdapter());
+
+        findViewById(R.id.test_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.notifyDataSetChanged();
+            }
+        });
 
     }
 
@@ -44,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final class DemoPagerHolder extends PagerHolder<Integer> {
         @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, int position) {
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container) {
             return inflater.inflate(R.layout.demo_holder_layout, container, false);
         }
 
@@ -54,15 +64,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void userInvisible(int position) {
-            super.userInvisible(position);
-
+        protected void userInvisible() {
             Log.i("DRAG_POSITION_TAG", "INVISIBLE:" + position);
         }
 
         @Override
-        protected void userVisible(int position) {
-            super.userVisible(position);
+        protected void userVisible() {
             Log.i("DRAG_POSITION_TAG", "VISIBLE:" + position);
 
         }

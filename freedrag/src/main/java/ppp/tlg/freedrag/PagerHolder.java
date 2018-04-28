@@ -8,15 +8,22 @@ import android.view.ViewGroup;
 public abstract class PagerHolder<T> {
 
     protected View rootView;
+    protected int position;
 
-    public abstract View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, int position);
+    public abstract View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container);
 
     public abstract void fillView(@NonNull T t);
 
-    protected void userVisible(int position) {
+    protected void userVisible() {
     }
 
-    protected void userInvisible(int position) {
+    protected void userInvisible() {
+    }
+
+    protected void onDestroyView() {
+    }
+
+    protected void update(@NonNull T t) {
     }
 
 }

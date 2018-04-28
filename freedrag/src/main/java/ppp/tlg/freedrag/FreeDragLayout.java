@@ -337,6 +337,20 @@ public class FreeDragLayout extends RelativeLayout {
         }
     }
 
+    public void resetLayoutStatus() {
+        resetBounds();
+
+        View child = getChild();
+        child.setX(initX);
+        child.setY(initY);
+        child.setScaleX(1f);
+        child.setScaleY(1f);
+
+        getBackground().setAlpha(255);
+
+        ViewCompat.postInvalidateOnAnimation(this);
+    }
+
     public boolean touchFocusBackToParent() {
         return lastScaleFactor <= 1f || touchFocusBackToParentEnable;
     }
