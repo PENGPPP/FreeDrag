@@ -24,6 +24,7 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
         View view = holder.onCreateView(LayoutInflater.from(container.getContext()), container, position);
         holder.rootView = view;
         viewPool.add(view);
+        bindHolder(holder, position);
         return holder;
     }
 
@@ -74,6 +75,8 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
     }
 
     public abstract PagerHolder createHolder(int position, int type);
+
+    public abstract void bindHolder(PagerHolder holder, int position);
 
     protected int getHolderType(int position) {
         return NO_TYPE;

@@ -32,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        public void bindHolder(PagerHolder holder, int position) {
+
+        }
+
+        @Override
         public int getCount() {
             return 10;
         }

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 public abstract class PagerHolder<T> {
 
-    View rootView;
+    protected View rootView;
 
     public abstract View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, int position);
 

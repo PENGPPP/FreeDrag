@@ -1,5 +1,6 @@
 package ppp.tlg.freedrag;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -32,6 +33,9 @@ public class FreeDragLayout extends RelativeLayout {
     private Rect contentRectProxy = new Rect();
 
     private boolean touchFocusBackToParentEnable = false;
+
+    private DragListener dragListener;
+    private int lastBgAlpha = 255;
 
     public FreeDragLayout(@NonNull Context context) {
         super(context);
@@ -93,12 +97,15 @@ public class FreeDragLayout extends RelativeLayout {
                 if (scale <= 1f && scale >= 0.5f && dis <= 0f) {
                     view.setScaleX(scale);
                     view.setScaleY(scale);
-                    setAlpha(scale);
                 }
 
+                if (scale <= 1f && scale >= 0f && dis <= 0f && getBackground() != null) {
+                    lastBgAlpha = (int) (scale * 255);
+                    getBackground().setAlpha((int) (scale * 255));
+                }
 
-                if (scale <= 1f && scale >= 0f && dis <= 0f) {
-                    setAlpha(scale);
+                if (dragListener != null) {
+                    dragListener.onDragDown(scale);
                 }
             }
 
@@ -194,9 +201,16 @@ public class FreeDragLayout extends RelativeLayout {
                 .setDuration(ANIMATION_DURATION)
                 .start();
 
-        animate().alpha(1f)
-                .setDuration(ANIMATION_DURATION)
-                .start();
+        ValueAnimator va = ValueAnimator.ofInt(lastBgAlpha, 255);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int value = (int) animation.getAnimatedValue();
+                getBackground().setAlpha(value);
+            }
+        });
+        va.setDuration(ANIMATION_DURATION);
+        va.start();
     }
 
     private void convertRect(float factor, RectF rectF) {
@@ -325,6 +339,14 @@ public class FreeDragLayout extends RelativeLayout {
 
     public boolean touchFocusBackToParent() {
         return lastScaleFactor <= 1f || touchFocusBackToParentEnable;
+    }
+
+    public void setDragListener(DragListener dragListener) {
+        this.dragListener = dragListener;
+    }
+
+    public interface DragListener {
+        void onDragDown(float progress);
     }
 
 }
