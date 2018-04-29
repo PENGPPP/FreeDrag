@@ -1,6 +1,5 @@
 package ppp.tlg.freedragwatcher;
 
-import android.database.DataSetObserver;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ppp.tlg.freedrag.FreeDragPagerAdapter;
+import ppp.tlg.freedrag.ViewPagerAdapter;
 import ppp.tlg.freedrag.FreeDragViewPager;
 import ppp.tlg.freedrag.PagerHolder;
 
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private static final class DemoPagerAdapter extends FreeDragPagerAdapter {
+    private static final class DemoPagerAdapter extends ViewPagerAdapter {
 
         @Override
         public PagerHolder createHolder(int position, int type) {

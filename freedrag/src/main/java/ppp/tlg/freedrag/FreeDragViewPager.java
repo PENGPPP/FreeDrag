@@ -11,14 +11,44 @@ import android.view.MotionEvent;
 
 public class FreeDragViewPager extends ViewPager {
 
-    private FreeDragPagerAdapter adapter;
+    private ViewPagerAdapter adapter;
+    private FreeDragLayout.DragListener dragListener;
 
     public FreeDragViewPager(@NonNull Context context) {
         super(context);
+        init();
     }
 
     public FreeDragViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init();
+    }
+
+    private void init() {
+        addOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if (dragListener == null) {
+                    return;
+                }
+
+                Object ob = adapter.getCurrentRootView();
+                if (ob != null && ob instanceof FreeDragLayout) {
+                    ((FreeDragLayout) ob).setDragListener(dragListener);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -37,11 +67,15 @@ public class FreeDragViewPager extends ViewPager {
 
     @Override
     public void setAdapter(@Nullable PagerAdapter adapter) {
-        if (!(adapter instanceof FreeDragPagerAdapter)) {
-            throw new RuntimeException("this pager adapter must be " + FreeDragPagerAdapter.class.getName());
+        if (!(adapter instanceof ViewPagerAdapter)) {
+            throw new RuntimeException("this pager adapter must be " + ViewPagerAdapter.class.getName());
         }
 
-        this.adapter = (FreeDragPagerAdapter) adapter;
+        this.adapter = (ViewPagerAdapter) adapter;
         super.setAdapter(adapter);
+    }
+
+    public void setDragListener(FreeDragLayout.DragListener dragListener) {
+        this.dragListener = dragListener;
     }
 }
