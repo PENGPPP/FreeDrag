@@ -12,6 +12,8 @@ public abstract class PagerHolder<T> {
 
     public abstract View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container);
 
+    public void onViewCreated(View rootView){}
+
     public abstract void fillView(@NonNull T t);
 
     protected void userVisible() {
