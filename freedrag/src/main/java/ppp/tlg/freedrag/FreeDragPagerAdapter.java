@@ -72,7 +72,7 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
 
         PagerHolder holder = (PagerHolder) object;
         if (holder != primaryItemHolder) {
-            if (primaryItemHolder != null && position > 0) {
+            if (primaryItemHolder != null && position >= 0) {
                 primaryItemHolder.userInvisible();
             }
 
