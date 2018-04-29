@@ -25,13 +25,6 @@ public class MainActivity extends AppCompatActivity {
         FreeDragViewPager viewPager = findViewById(R.id.dragViewPager);
         viewPager.setAdapter(new DemoPagerAdapter());
 
-        findViewById(R.id.test_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adapter.notifyDataSetChanged();
-            }
-        });
-
     }
 
     private static final class DemoPagerAdapter extends FreeDragPagerAdapter {

@@ -304,11 +304,14 @@ public class FreeDragLayout extends RelativeLayout {
 
     private View getChild() {
 
-        if (getChildCount() != 1) {
-            throw new RuntimeException("slide close layout can have one only one child!");
+        if (getChildCount() > 1) {
+            throw new RuntimeException(this.getClass().getName() + " can have only one child!");
+        } else if (getChildCount() == 0) {
+            return new View(getContext());
+        } else {
+            return getChildAt(0);
         }
 
-        return getChildAt(0);
     }
 
     @Override
