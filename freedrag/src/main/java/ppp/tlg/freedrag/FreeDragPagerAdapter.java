@@ -22,7 +22,7 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        log("instantiateItem");
+//        log("instantiateItem");
 
         PagerHolder holder = createHolder(position, getHolderType(position));
         holder.position = position;
@@ -37,7 +37,7 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
 
-        log("destroyItem");
+//        log("destroyItem");
 
         PagerHolder holder = ((PagerHolder) object);
         holderPool.remove(holder);
@@ -48,12 +48,12 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
 
     @Override
     public void startUpdate(@NonNull ViewGroup container) {
-        log("startUpdate");
+//        log("startUpdate");
     }
 
     @Override
     public void finishUpdate(@NonNull ViewGroup container) {
-        log("finishUpdate");
+//        log("finishUpdate");
 
         for (View view : viewPool) {
             container.addView(view);
@@ -68,7 +68,7 @@ public abstract class FreeDragPagerAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        log("setPrimaryItem");
+        log("setPrimaryItem:" + position);
 
         PagerHolder holder = (PagerHolder) object;
         if (holder != primaryItemHolder) {

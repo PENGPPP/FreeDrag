@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         final DemoPagerAdapter adapter = new DemoPagerAdapter();
 
         FreeDragViewPager viewPager = findViewById(R.id.dragViewPager);
-        viewPager.setAdapter(new DemoPagerAdapter());
+        viewPager.setAdapter(adapter);
 
     }
 

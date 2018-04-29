@@ -2,8 +2,11 @@ package ppp.tlg.freedrag;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -37,6 +40,8 @@ public class FreeDragLayout extends RelativeLayout {
 
     private DragListener dragListener;
     private int lastBgAlpha = 255;
+
+    private final int defaultBackgroundColor = Color.BLACK;
 
     public FreeDragLayout(@NonNull Context context) {
         super(context);
@@ -150,6 +155,11 @@ public class FreeDragLayout extends RelativeLayout {
             }
 
         });
+
+
+        if (getBackground() == null) {
+            setBackgroundColor(defaultBackgroundColor);
+        }
 
     }
 
@@ -317,8 +327,6 @@ public class FreeDragLayout extends RelativeLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-
-
         initBounds();
     }
 
