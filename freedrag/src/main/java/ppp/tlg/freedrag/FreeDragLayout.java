@@ -21,27 +21,26 @@ import android.widget.RelativeLayout;
 
 public class FreeDragLayout extends RelativeLayout {
 
-    private GestureDetector gestureDetector;
-    private ScaleGestureDetector scaleGestureDetector;
-    private float initX = 0f;
-    private float initY = 0f;
-
     private static final long ANIMATION_DURATION = 200L;
     private static final float TOUCH_BEGIN_OFFSET = 200;
-
-    private boolean startMoveFlag = false;
-
-    private float lastScaleFactor = 1f;
+    private static final int DEFAULT_BG_COLOR = Color.BLACK;
+    private static final float MIN_SCALE = 0.3F;
 
     private RectF contentRect = new RectF();
     private Rect contentRectProxy = new Rect();
-
-    private boolean touchFocusBackToParentEnable = false;
-
     private DragListener dragListener;
+    private GestureDetector gestureDetector;
+    private ScaleGestureDetector scaleGestureDetector;
+
+    private float initX = 0f;
+    private float initY = 0f;
+    private float lastScaleFactor = 1f;
+    private float lastDragDownScaleFactor = 1f;
     private int lastBgAlpha = 255;
 
-    private final int defaultBackgroundColor = Color.BLACK;
+    private boolean touchFocusBackToParentEnable = false;
+    private boolean startMoveFlag = false;
+    private boolean scaleEnable = true;
 
     public FreeDragLayout(@NonNull Context context) {
         super(context);
@@ -106,18 +105,23 @@ public class FreeDragLayout extends RelativeLayout {
                 view.setY(view.getY() - distanceY);
                 view.setX(view.getX() - distanceX);
 
-                if (scale <= 1f && scale >= 0.5f && dis <= 0f) {
-                    view.setScaleX(scale);
-                    view.setScaleY(scale);
+                if (scale >= 0f && scale <= 1f && dis <= 0f) {
+
+                    if (scale >= MIN_SCALE) {
+                        view.setScaleX(scale);
+                        view.setScaleY(scale);
+                    }
+
+                    if (getBackground() != null) {
+                        lastBgAlpha = (int) (scale * 255);
+                        getBackground().setAlpha(lastBgAlpha);
+                    }
                 }
 
-                if (scale <= 1f && scale >= 0f && dis <= 0f && getBackground() != null) {
-                    lastBgAlpha = (int) (scale * 255);
-                    getBackground().setAlpha((int) (scale * 255));
-                }
-
-                if (dragListener != null) {
-                    dragListener.onDragDown(scale);
+                if (dis > 0) {
+                    lastDragDownScaleFactor = 1f;
+                } else {
+                    lastDragDownScaleFactor = scale;
                 }
             }
 
@@ -158,8 +162,9 @@ public class FreeDragLayout extends RelativeLayout {
 
 
         if (getBackground() == null) {
-            setBackgroundColor(defaultBackgroundColor);
+            setBackgroundColor(DEFAULT_BG_COLOR);
         }
+        getBackground().setAlpha(255);
 
     }
 
@@ -174,7 +179,7 @@ public class FreeDragLayout extends RelativeLayout {
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_MOVE:
 
-                if (!startMoveFlag && ev.getPointerCount() > 1) {
+                if (scaleEnable && !startMoveFlag && ev.getPointerCount() > 1) {
                     scaleGestureDetector.onTouchEvent(ev);
                 } else {
                     gestureDetector.onTouchEvent(ev);
@@ -182,7 +187,7 @@ public class FreeDragLayout extends RelativeLayout {
 
                 break;
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
+//            case MotionEvent.ACTION_CANCEL:
                 checkStatus();
             default:
                 gestureDetector.onTouchEvent(ev);
@@ -201,9 +206,14 @@ public class FreeDragLayout extends RelativeLayout {
         startMoveFlag = false;
 
         if (isDragDown()) {
-            resetBounds();
+
+            if (dragListener == null || !dragListener.dragDownResult(lastDragDownScaleFactor)) {
+                resetBounds();
+                animationToInitStatus();
+            }
             lastScaleFactor = 1f;
-            animationToInitStatus();
+            lastDragDownScaleFactor = 1f;
+
         } else {
             borderTest();
         }
@@ -225,6 +235,7 @@ public class FreeDragLayout extends RelativeLayout {
 
         int startAlpha = lastBgAlpha;
         lastBgAlpha = 255;
+
         ValueAnimator va = ValueAnimator.ofInt(startAlpha, 255);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -363,6 +374,9 @@ public class FreeDragLayout extends RelativeLayout {
     }
 
     public void resetLayoutStatus() {
+        lastScaleFactor = 1f;
+        lastDragDownScaleFactor = 1f;
+        startMoveFlag = false;
         resetBounds();
 
         View child = getChild();
@@ -386,7 +400,10 @@ public class FreeDragLayout extends RelativeLayout {
     }
 
     public interface DragListener {
-        void onDragDown(float progress);
+        boolean dragDownResult(float progress);
     }
 
+    public void setScaleEnable(boolean scaleEnable) {
+        this.scaleEnable = scaleEnable;
+    }
 }

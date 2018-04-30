@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ppp.tlg.freedrag.FreeDragLayout;
 import ppp.tlg.freedrag.ViewPagerAdapter;
 import ppp.tlg.freedrag.FreeDragViewPager;
 import ppp.tlg.freedrag.PagerHolder;
@@ -22,6 +23,15 @@ public class MainActivity extends AppCompatActivity {
         final DemoPagerAdapter adapter = new DemoPagerAdapter();
 
         FreeDragViewPager viewPager = findViewById(R.id.dragViewPager);
+
+        viewPager.setDragListener(new FreeDragLayout.DragListener() {
+            @Override
+            public boolean dragDownResult(float progress) {
+
+                Log.i("TEST_DRAG_RESULT", "P:" + progress);
+                return false;
+            }
+        });
         viewPager.setAdapter(adapter);
 
     }

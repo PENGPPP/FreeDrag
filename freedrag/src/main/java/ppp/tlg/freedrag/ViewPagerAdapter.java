@@ -12,9 +12,9 @@ import java.util.List;
 
 public abstract class ViewPagerAdapter extends PagerAdapter {
 
-    private List<View> viewPool = new ArrayList<>();
-    private List<View> removeViewPool = new ArrayList<>();
-    private List<PagerHolder> holderPool = new ArrayList<>();
+    private final List<View> viewPool = new ArrayList<>();
+    private final List<View> removeViewPool = new ArrayList<>();
+    private final List<PagerHolder> holderPool = new ArrayList<>();
     private PagerHolder primaryItemHolder;
 
     private static final int NO_TYPE = -1;
@@ -113,4 +113,11 @@ public abstract class ViewPagerAdapter extends PagerAdapter {
             }
         }
     }
+
+    void onDetachedFromWindow() {
+        for (PagerHolder holder : holderPool) {
+            holder.onDestroyView();
+        }
+    }
+
 }

@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 public class FreeDragViewPager extends ViewPager {
 
@@ -16,48 +17,20 @@ public class FreeDragViewPager extends ViewPager {
 
     public FreeDragViewPager(@NonNull Context context) {
         super(context);
-        init();
     }
 
     public FreeDragViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
-    private void init() {
-        addOnPageChangeListener(new OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                if (dragListener == null) {
-                    return;
-                }
-
-                Object ob = adapter.getCurrentRootView();
-                if (ob != null && ob instanceof FreeDragLayout) {
-                    ((FreeDragLayout) ob).setDragListener(dragListener);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
-        Log.i("SUPER_VIEW_PAGER", "GETITEM:" + getCurrentItem());
         Object ob = adapter.getCurrentRootView();
 
         if (ob != null && ob instanceof FreeDragLayout) {
+            ((FreeDragLayout) ob).setDragListener(dragListener);
             return ((FreeDragLayout) ob).touchFocusBackToParent() && super.onInterceptTouchEvent(ev);
         } else {
             return super.onInterceptTouchEvent(ev);
@@ -73,9 +46,18 @@ public class FreeDragViewPager extends ViewPager {
 
         this.adapter = (ViewPagerAdapter) adapter;
         super.setAdapter(adapter);
+
     }
 
     public void setDragListener(FreeDragLayout.DragListener dragListener) {
         this.dragListener = dragListener;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (adapter != null) {
+            adapter.onDetachedFromWindow();
+        }
     }
 }
